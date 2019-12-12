@@ -5,7 +5,7 @@ import {API}  from '../../config';
 
 const SignUp = () => (
     <Layout title="Signin Page" description="Node React Ecomerce application">
-    {API}
+    {process.env.API_URL}
     </Layout>
 )
 
