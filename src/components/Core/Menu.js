@@ -1,9 +1,33 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import {API} from "../../config";
 
 const isActive = (history, path) => {
     const defaultClasses = 'nav-item nav-link';
     return history.location.pathname === path ? `${defaultClasses} active` : defaultClasses;
+};
+
+const signOut = (cb) => {
+    if(typeof window != 'undefined') {
+        localStorage.removeItem('jwt');
+    }
+    cb();
+    return fetch(`${API}/signout`, {
+        method: "GET"
+    })
+        .then(res => console.log(res))
+        .catch(err => console.error(err));
+};
+
+const isAuth = () => {
+    if(typeof window == 'undefined') {
+        return false;
+    }
+    if(localStorage.getItem('jwt')) {
+        return JSON.parse(localStorage.getItem('jwt'));
+    }else {
+        return false;
+    }
 }
 
 const Menu = ({history}) => {
@@ -16,8 +40,15 @@ const Menu = ({history}) => {
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <Link className={isActive(history, '/')} to="/">Home <span class="sr-only">(current)</span></Link>
-                    <Link className={isActive(history, '/signin')} to="/signin">Signin</Link>
-                    <Link className={isActive(history, '/signup')} to="/signup">Signup</Link>
+                    {!isAuth() && (
+                        <Fragment>
+                            <Link className={isActive(history, '/signin')} to="/signin">Signin</Link>
+                            <Link className={isActive(history, '/signup')} to="/signup">Signup</Link>
+                        </Fragment>
+                    )}
+                    {isAuth() && (
+                        <span className="nav-item nav-link"  onClick={() => signOut(() => history.push('/'))}>Sign out</span>
+                    )}
                 </div>
             </div>
         </nav>
