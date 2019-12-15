@@ -1,5 +1,7 @@
 import DashBoard from './DashBoard';
+import AdminDashBoard from './AdminDashboard';
 
-export default {
-    DashBoard
+export {
+    DashBoard,
+    AdminDashBoard
 }

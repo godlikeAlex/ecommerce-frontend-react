@@ -5,7 +5,7 @@ import SignUp from './components/Auth/SignUp';
 import Home from './components/Core/MainPage';
 import Menu from './components/Core/Menu';
 import PrivateRoute from './components/Auth/PrivaRoute';
-import DashBoard from "./components/dashboard/DashBoard";
+import {DashBoard} from "./components/dashboard";
 
 const Routes = () => (
     <Router>

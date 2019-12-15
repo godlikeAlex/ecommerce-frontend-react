@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import Layout from '../Core/Layout';
 import {API}  from '../../config';
 import { Redirect } from "react-router-dom";
+import {isAuth} from '../Auth'
+
 
 const SignUp = () => {
     const [values, setValues] = useState({
@@ -11,6 +13,8 @@ const SignUp = () => {
         loading: false,
         redirectToReferrer: false
     });
+
+    const {user} = isAuth();
 
     const {email, password, error, loading, redirectToReferrer} = values;
 
@@ -71,7 +75,11 @@ const SignUp = () => {
 
     const redirectUser = () => {
         if(redirectToReferrer) {
-            return <Redirect to="/" />
+            if(user && user.role === 1) {
+                return <Redirect to="/admin/dashboard" />
+            } else {
+                return <Redirect to="/dashboard" />
+            }
         }
     };
 
@@ -89,7 +97,7 @@ const SignUp = () => {
                     <label className="text-muted">Password</label>
                     <input name="password" value={password} onChange={handleChange} type="password" className="form-control"/>
                 </div>
-                <button onClick={clickSubmit} className="btn btn-primary">Create Account</button>
+                <button onClick={clickSubmit} className="btn btn-primary">Log in</button>
             </form>
         </Layout>
     )

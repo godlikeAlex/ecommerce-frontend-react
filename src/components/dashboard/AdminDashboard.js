@@ -3,26 +3,26 @@ import Layout from "../Core/Layout";
 import {isAuth} from '../Auth'
 import {Link} from "react-router-dom";
 
-const DashBoard = () => {
+const AdminDashBoard = () => {
     const {user: {_id, name, email, role}} = isAuth();
 
-    const userLinks = () => {
+    const adminLinks = () => {
         return (
             <div className="card">
                 <h4 className="card-header">User Links</h4>
                 <ul className="list-group">
                     <li className="list-group-item">
-                        <Link className="nav-link" to="/cart" >My Cart</Link>
+                        <Link className="nav-link" to="/create/category" >Create category</Link>
                     </li>
                     <li className="list-group-item">
-                        <Link className="nav-link" to="/profile/update" >Profile update</Link>
+                        <Link className="nav-link" to="/create/product" >Create Product</Link>
                     </li>
                 </ul>
             </div>
         )
     };
 
-    const userInfo = () => (
+    const adminInfo = () => (
         <div className="card mb-5">
             <h3 className="card-header">User information</h3>
             <ul className="list-group">
@@ -33,28 +33,19 @@ const DashBoard = () => {
         </div>
     );
 
-    const purchaseHistory = () => (
-        <div className="card mb-5">
-            <h3 className="card-header">Purchase history</h3>
-            <ul className="list-group">
-                <li className="list-group-item">History #1</li>
-            </ul>
-        </div>
-    );
 
     return (
         <Layout title="Dashboard" description={`Hello ${name}`} className="container-fluid">
             <div className="row">
                 <div className="col-3">
-                    {userLinks()}
+                    {adminLinks()}
                 </div>
                 <div className="col-9">
-                    {userInfo()}
-                    {purchaseHistory()}
+                    {adminInfo()}
                 </div>
             </div>
         </Layout>
     );
 };
 
-export default DashBoard;
+export default AdminDashBoard;
