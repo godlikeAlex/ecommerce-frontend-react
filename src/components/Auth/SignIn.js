@@ -81,6 +81,10 @@ const SignUp = () => {
                 return <Redirect to="/dashboard" />
             }
         }
+
+        if(isAuth()) {
+            return <Redirect to="/" />
+        }
     };
 
     return (
