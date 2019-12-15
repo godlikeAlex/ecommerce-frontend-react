@@ -56,6 +56,7 @@ const SignUp = () => {
                     });
                 }
             })
+            .catch(err => console.error(err));
     };
 
     const showError = () => (

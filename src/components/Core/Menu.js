@@ -1,34 +1,11 @@
 import React, {Fragment} from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import {API} from "../../config";
+import {isAuth, signOut} from '../Auth';
 
 const isActive = (history, path) => {
     const defaultClasses = 'nav-item nav-link';
     return history.location.pathname === path ? `${defaultClasses} active` : defaultClasses;
 };
-
-const signOut = (cb) => {
-    if(typeof window != 'undefined') {
-        localStorage.removeItem('jwt');
-    }
-    cb();
-    return fetch(`${API}/signout`, {
-        method: "GET"
-    })
-        .then(res => console.log(res))
-        .catch(err => console.error(err));
-};
-
-const isAuth = () => {
-    if(typeof window == 'undefined') {
-        return false;
-    }
-    if(localStorage.getItem('jwt')) {
-        return JSON.parse(localStorage.getItem('jwt'));
-    }else {
-        return false;
-    }
-}
 
 const Menu = ({history}) => {
     return (
@@ -40,6 +17,8 @@ const Menu = ({history}) => {
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <Link className={isActive(history, '/')} to="/">Home <span class="sr-only">(current)</span></Link>
+                    <Link className={isActive(history, '/dashboard')} to="/dashboard">Dashboard <span class="sr-only">(current)</span></Link>
+
                     {!isAuth() && (
                         <Fragment>
                             <Link className={isActive(history, '/signin')} to="/signin">Signin</Link>
