@@ -17,7 +17,7 @@ const Menu = ({history}) => {
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <Link className={isActive(history, '/')} to="/">Home <span class="sr-only">(current)</span></Link>
-                    {isAuth().user.role === 0 && (
+                    {isAuth() && isAuth().user.role === 0 && (
                         <Link className={isActive(history, '/dashboard')} to="/dashboard">Dashboard <span class="sr-only">(current)</span></Link>
                     )}
 
