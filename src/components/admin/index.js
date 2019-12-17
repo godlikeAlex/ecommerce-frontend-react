@@ -1,5 +1,7 @@
 import AddCategory from "./AddCategory";
+import CreateProduct from "./AddProduct";
 
 export {
-    AddCategory
+    AddCategory,
+    CreateProduct
 }

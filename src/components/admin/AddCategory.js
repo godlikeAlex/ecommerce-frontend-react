@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import Layout from "../Core/Layout";
 import { isAuth } from '../Auth'
-import { Link } from "react-router-dom";
 import {createCategory} from './ApiAdmin';
 
 const AddCategory = () => {
