@@ -76,7 +76,7 @@ const CreateProduct = () => {
             <h4>Post Photo</h4>
             <div className="form-group">
                 <label className="btn btn-outline-secondary">
-                    <input type="file" name="photo" accept="image/*"/>
+                    <input type="file" name="photo" onChange={handleChange} accept="image/*"/>
                 </label>
             </div>
             <div className="form-group">
