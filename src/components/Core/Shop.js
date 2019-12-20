@@ -4,6 +4,7 @@ import {getCategories, getFilteredProducts} from './ApiCore';
 import CheckBox from "./CheckBox";
 import {prices} from './fixedPrice';
 import RadioBox from "./RadioBox";
+import Card from "./Card";
 
 const Shop = () => {
     const [myFilters, setMyFilters] = useState({
@@ -33,7 +34,7 @@ const Shop = () => {
     const loadFiltersResult = filters => {
         getFilteredProducts(skip, limit, filters).then(data => {
             if(data.err) setError(data.err);
-            else setFilteredResults(data);
+            else setFilteredResults(data.products);
         })
     };
 
@@ -66,7 +67,12 @@ const Shop = () => {
                     </div>
 
                     <div className="col-8">
-                        {JSON.stringify(filteredResults)}
+                        <h2 className="mb-2">Products</h2>
+                        <div className="row">
+                            {filteredResults.map((product, i) => (
+                                <Card key={i} product={product} />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </Layout>
