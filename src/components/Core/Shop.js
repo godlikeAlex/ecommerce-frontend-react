@@ -14,6 +14,7 @@ const Shop = () => {
     const [error, setError] = useState(null);
     const [limit, setLimit] = useState(6);
     const [skip, setSkip] = useState(0);
+    const [size, setSize] = useState(0);
     const [filteredResults, setFilteredResults] = useState([]);
 
     const init = () => {
@@ -22,6 +23,7 @@ const Shop = () => {
                 setError('Whoops, Something went wrong 😔');
             } else {
                 setCategories(data);
+
             }
         })
     };
@@ -34,8 +36,32 @@ const Shop = () => {
     const loadFiltersResult = filters => {
         getFilteredProducts(skip, limit, filters).then(data => {
             if(data.err) setError(data.err);
-            else setFilteredResults(data.products);
+            else {
+                setFilteredResults(data.products);
+                setSize(data.size);
+                setSkip(0);
+            }
         })
+    };
+
+    const loadMore = () => {
+        let toSkip = skip + limit;
+        getFilteredProducts(toSkip, limit, myFilters.filters).then(data => {
+            if(data.err) setError(data.err);
+            else {
+                setFilteredResults([...filteredResults, ...data.products]);
+                setSize(data.size);
+                setSkip(toSkip);
+            }
+        })
+    };
+
+    const loadMoreButton = () => {
+        return (
+            size > 0 && size >= limit && (
+                <button onClick={loadMore} className="btn btn-warning mb-5">Load more</button>
+            )
+        )
     };
 
     const handleFilters = (filters, filterBy = 'category') => {
@@ -73,7 +99,10 @@ const Shop = () => {
                                 <Card key={i} product={product} />
                             ))}
                         </div>
+                        <hr />
+                        {loadMoreButton()}
                     </div>
+
                 </div>
             </Layout>
         </div>
