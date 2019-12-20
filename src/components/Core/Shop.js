@@ -3,6 +3,7 @@ import Layout from "./Layout";
 import {getCategories} from './ApiCore';
 import CheckBox from "./CheckBox";
 import {prices} from './fixedPrice';
+import RadioBox from "./RadioBox";
 
 const Shop = () => {
     const [myFilters, setMyFilters] = useState({
@@ -39,6 +40,11 @@ const Shop = () => {
                         <h4>Filter by category</h4>
                         <ul>
                             <CheckBox categories={categories} handleFilters={filters => handleFilters(filters, 'category')} />
+                        </ul>
+
+                        <h4>Filter by price range</h4>
+                        <ul>
+                            <RadioBox prices={prices} handleFilters={filters => handleFilters(filters, 'price')} />
                         </ul>
                     </div>
 
