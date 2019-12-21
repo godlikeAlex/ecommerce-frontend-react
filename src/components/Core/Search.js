@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { getCategories } from "./ApiCore";
+import { getCategories, list } from "./ApiCore";
+import Card from "./Card";
 
 const Search = () => {
     const [data, setData] = useState({
@@ -27,12 +28,53 @@ const Search = () => {
         loadCategories();
     }, []);
 
-    const searchSubmit = () => {
+    const searchMessage = (searched, results) => {
+        if(searched && results.length > 0) {
+            return `Found ${results.length} products`;
+        }
+
+        if(searched && results.length < 1) {
+            return `No products found`;
+        }
 
     };
 
-    const handleChange = e => {
+    const searchedProducts = (products = []) => {
+        return (
+            <div>
+                <h2 className='mt-4 mb-4'>
+                    {searchMessage(searched, results)}
+                </h2>
+                <div className='row'>
+                    {products.map(product => (
+                        <Card product={product} key={product._id} />
+                    ))}
+                </div>
+            </div>
+        )
+    };
 
+    const searchData = () => {
+        if(search) {
+            list({search: search || undefined, category }).then(response => {
+                if(response.err) {
+                    console.error(response.err);
+                } else {
+                    setData({...data, results: response, searched: true});
+                }
+            })
+        }
+        console.log(search, category);
+    };
+
+    const searchSubmit = e => {
+        e.preventDefault();
+        searchData();
+    };
+
+    const handleChange = e => {
+        const target = e.target;
+        setData({...data, [target.name]: target.value, searched: false});
     };
 
     const searchForm = () => (
@@ -53,7 +95,8 @@ const Search = () => {
                         className="form-control"
                         onChange={handleChange}
                         name="search"
-                        value='Search By  name'
+                        value={search}
+                        placeholder='Search By name'
                     />
                 </div>
                 <span className="btn input-group-append" style={{border: 'none'}}>
@@ -67,6 +110,10 @@ const Search = () => {
         <div>
             <div className="container">
                 {searchForm()}
+            </div>
+
+            <div className="container-fluid mb-3 mt-3">
+                {searchedProducts(results)}
             </div>
         </div>
     )
