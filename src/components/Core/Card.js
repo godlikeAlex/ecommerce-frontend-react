@@ -4,10 +4,9 @@ import ShowImage from "./ShowImage";
 import moment from "moment";
 import {addItem, updateItem, removeItem} from "./cartHelpers";
 
-const Card = ({product, singleProduct = false, cart = false}) => {
+const Card = ({product, singleProduct = false, cart = false, deleteItem}) => {
     const [redirect, setRedirect] = useState(false);
     const [count, setCount] = useState(product.count);
-
     const showStock = quantity => (
         quantity > 0 ?
             <span className='badge badge-primary badge-pill'>In stock</span>
@@ -99,7 +98,10 @@ const Card = ({product, singleProduct = false, cart = false}) => {
                         View Product
                     </button>
                 </Link>
-                <button onClick={() => removeItem(product._id)} className="btn btn-outline-danger mt-2 mb-2 col-md-6">
+                <button onClick={() => {
+                    removeItem(product._id);
+                    deleteItem();
+                }} className="btn btn-outline-danger mt-2 mb-2 col-md-6">
                     Delete product
                 </button>
             </div>
