@@ -2,10 +2,11 @@ import React, {useState, Fragment} from "react";
 import { Link, Redirect } from "react-router-dom";
 import ShowImage from "./ShowImage";
 import moment from "moment";
-import {addItem} from "./cartHelpers";
+import {addItem, updateItem} from "./cartHelpers";
 
 const Card = ({product, singleProduct = false, cart = false}) => {
     const [redirect, setRedirect] = useState(false);
+    const [count, setCount] = useState(product.count);
     const showStock = quantity => (
         quantity > 0 ?
             <span className='badge badge-primary badge-pill'>In stock</span>
@@ -21,6 +22,13 @@ const Card = ({product, singleProduct = false, cart = false}) => {
 
     const shouldRedirect = redirect => {
         if(redirect) return <Redirect to='/cart' />
+    };
+
+    const handleChange = productId => event => {
+        setCount(event.target.value < 1 ? 1 : event.target.value);
+        if(event.target.value >= 1) {
+            updateItem(productId, event.target.value);
+        }
     };
 
     const productCard = () => (
@@ -70,8 +78,21 @@ const Card = ({product, singleProduct = false, cart = false}) => {
                 <ShowImage item={product} url="product" />
             </div>
             <div className="col-md-9">
-                <h3>{product.name}</h3>
+                <h5>{product.name}</h5>
                 <p style={{fontSize: '15px'}}>Price: {product.price}$</p>
+                <div>
+                    <div className="input-group mb-3">
+                        <div className="input-group-prepend">
+                            <span className="input-group-text">Adjust quantity</span>
+                        </div>
+                        <input
+                            type="number"
+                            value={count}
+                            onChange={handleChange(product._id)}
+                        />
+                    </div>
+
+                </div>
                 <Link to={`/product/${product._id}`}>
                     <button className="btn btn-outline-primary mt-2 mb-2 col-md-12">
                         View Product
