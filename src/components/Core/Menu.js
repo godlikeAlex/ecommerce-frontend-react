@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import {isAuth, signOut} from '../Auth';
+import {itemTotal} from "./cartHelpers";
 
 const isActive = (history, path) => {
     const defaultClasses = 'nav-item nav-link';
@@ -36,6 +37,8 @@ const Menu = ({history}) => {
                     {isAuth() && (
                         <span className="nav-item nav-link"  onClick={() => signOut(() => history.push('/'))}>Sign out</span>
                     )}
+
+                    <Link style={{position: 'absolute', right: '35px'}} className={isActive(history, '/shop')} to="/shop"><i className="fa fa-shopping-cart"></i> <sup><small style={{color: 'red'}} className='cart-badge'>{itemTotal()}</small></sup></Link>
                 </div>
             </div>
         </nav>
