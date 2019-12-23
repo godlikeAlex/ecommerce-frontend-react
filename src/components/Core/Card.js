@@ -1,16 +1,27 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, {useState, Fragment} from "react";
+import { Link, Redirect } from "react-router-dom";
 import ShowImage from "./ShowImage";
 import moment from "moment";
+import {addItem} from "./cartHelpers";
 
 const Card = ({product, singleProduct = false}) => {
-
+    const [redirect, setRedirect] = useState(false);
     const showStock = quantity => (
         quantity > 0 ?
             <span className='badge badge-primary badge-pill'>In stock</span>
             :
             <span  className='badge badge-primary badge-pill'>Out stock</span>
     );
+
+    const addToCart = () => {
+        addItem(product, () => {
+            setRedirect(true);
+        });
+    };
+
+    const shouldRedirect = redirect => {
+        if(redirect) return <Redirect to='/cart' />
+    };
 
     const productCard = () => (
         <div className="col-4 mb-3">
@@ -27,7 +38,7 @@ const Card = ({product, singleProduct = false}) => {
                             View Product
                         </button>
                     </Link>
-                    <button className="btn btn-outline-warning-mt-2 mb-2">
+                    <button onClick={addToCart} className="btn btn-outline-warning-mt-2 mb-2">
                         Add to card
                     </button>
                 </div>
@@ -46,7 +57,7 @@ const Card = ({product, singleProduct = false}) => {
                 <p style={{fontSize: '25px'}}>Price: {product.price}$</p>
                 <p>{showStock(product.quantity)}</p>
                 <p>Added on {moment(product.createdAt).fromNow()}</p>
-                <button className="btn btn-outline-warning mt-2 mb-2 col-md-12">
+                <button onClick={addToCart} className="btn btn-outline-warning mt-2 mb-2 col-md-12">
                     Add to card
                 </button>
             </div>
@@ -54,7 +65,10 @@ const Card = ({product, singleProduct = false}) => {
     );
 
     return (
-        singleProduct ? productSingle() : productCard()
+        <Fragment>
+            {shouldRedirect(redirect)}
+            {singleProduct ? productSingle() : productCard()}
+        </Fragment>
     )
 };
 
