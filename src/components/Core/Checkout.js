@@ -1,18 +1,26 @@
 import React, {useState, useEffect} from 'react';
-import Layout from './Layout';
-import {getCart} from "./cartHelpers";
-import Card from "./Card";
+import {isAuth} from "../Auth";
+import {Link} from "react-router-dom";
 
 const CheckOut = ({products}) => {
 
     const getTotal = () => {
-        products.reduce( (currentValue, nextValue) => {
+        return products.reduce( (currentValue, nextValue) => {
             return currentValue + nextValue.count * nextValue.price;
         }, 0);
     };
 
     return (
-        <h3>Total: {getTotal()}</h3>
+        <div>
+            <h3>Total: {getTotal()} $</h3>
+            {isAuth() ? (
+                <button className="btn btn-success">Checkout</button>
+            ) : (
+                <Link to='/signin'>
+                    <button className="btn btn-primary">Sign in to checkout</button>
+                </Link>
+            )}
+        </div>
     )
 };
 

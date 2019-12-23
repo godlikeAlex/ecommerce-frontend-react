@@ -4,7 +4,7 @@ import ShowImage from "./ShowImage";
 import moment from "moment";
 import {addItem, updateItem, removeItem} from "./cartHelpers";
 
-const Card = ({product, singleProduct = false, cart = false, deleteItem}) => {
+const Card = ({product, singleProduct = false, cart = false, setRun = f => f, run = undefined}) => {
     const [redirect, setRedirect] = useState(false);
     const [count, setCount] = useState(product.count);
     const showStock = quantity => (
@@ -25,6 +25,7 @@ const Card = ({product, singleProduct = false, cart = false, deleteItem}) => {
     };
 
     const handleChange = productId => event => {
+        setRun(!run); // run useEffect in parent Cart
         setCount(event.target.value < 1 ? 1 : event.target.value);
         if(event.target.value >= 1) {
             updateItem(productId, event.target.value);
@@ -98,10 +99,13 @@ const Card = ({product, singleProduct = false, cart = false, deleteItem}) => {
                         View Product
                     </button>
                 </Link>
-                <button onClick={() => {
-                    removeItem(product._id);
-                    deleteItem();
-                }} className="btn btn-outline-danger mt-2 mb-2 col-md-6">
+                <button
+                    onClick={() => {
+                        removeItem(product._id);
+                        setRun(!run); // run useEffect in parent Cart
+                    }}
+                    className="btn btn-outline-danger mt-2 mb-2 col-md-6"
+                >
                     Delete product
                 </button>
             </div>
