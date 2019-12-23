@@ -4,7 +4,7 @@ import ShowImage from "./ShowImage";
 import moment from "moment";
 import {addItem} from "./cartHelpers";
 
-const Card = ({product, singleProduct = false}) => {
+const Card = ({product, singleProduct = false, cart = false}) => {
     const [redirect, setRedirect] = useState(false);
     const showStock = quantity => (
         quantity > 0 ?
@@ -64,10 +64,27 @@ const Card = ({product, singleProduct = false}) => {
         </div>
     );
 
+    const productInCart = () => (
+        <div className='row'>
+            <div className="col-md-3">
+                <ShowImage item={product} url="product" />
+            </div>
+            <div className="col-md-9">
+                <h3>{product.name}</h3>
+                <p style={{fontSize: '15px'}}>Price: {product.price}$</p>
+                <Link to={`/product/${product._id}`}>
+                    <button className="btn btn-outline-primary mt-2 mb-2 col-md-12">
+                        View Product
+                    </button>
+                </Link>
+            </div>
+        </div>
+    );
+
     return (
         <Fragment>
             {shouldRedirect(redirect)}
-            {singleProduct ? productSingle() : productCard()}
+            {cart ? productInCart() : singleProduct ? productSingle() : productCard()}
         </Fragment>
     )
 };
