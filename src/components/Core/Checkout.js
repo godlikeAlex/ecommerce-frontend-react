@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {isAuth} from "../Auth";
 import {Link} from "react-router-dom";
-import { getBrainTreeToken } from './ApiCore';
+import {getBrainTreeToken, processPayment} from './ApiCore';
 import DropIn from 'braintree-web-drop-in-react';
 
 const CheckOut = ({products}) => {
@@ -19,7 +19,7 @@ const CheckOut = ({products}) => {
     const getToken = (userId, token) => {
         getBrainTreeToken(userId, token).then(data => {
             if(data.err) setData({...data, error: data.err});
-            else setData({...data, clientToken: data.clientToken})
+            else setData({clientToken: data.clientToken})
         })
     };
 
@@ -39,10 +39,21 @@ const CheckOut = ({products}) => {
             .then(data => {
                 console.log(data);
                 nonce = data.nonce;
-                console.log('send nonce and total to process:', nonce, getTotal(products))
+                // console.log('send nonce and total to process:', nonce, getTotal(products));
+                const paymentData = {
+                    paymentMethodNonce: nonce,
+                    amount: getTotal(products)
+                };
+
+                processPayment(userId, token, paymentData)
+                    .then(response => {
+                        setData({...data, success: response.success});
+
+                    })
+                    .catch(err => console.error(err))
             })
             .catch(err => {
-                console.log('dropin error', err);
+                // console.log('dropin error', err);
                 setData({...data, error: err});
             })
     };
@@ -64,9 +75,16 @@ const CheckOut = ({products}) => {
         <div className='alert alert-danger' style={{display: error ? '' : 'none'}}>Whoops error.</div>
     );
 
+    const showSuccess = (success) => (
+        <div className='alert alert-success' style={{display: success ? '' : 'none'}}>
+            Thanks! Your payment was successful
+        </div>
+    );
+
     return (
         <div>
             <h3>Total: {getTotal()} $</h3>
+            {showSuccess(data.success)}
             {showError(data.error)}
             {isAuth() ? (
                 <div>{showDropIn()}</div>
