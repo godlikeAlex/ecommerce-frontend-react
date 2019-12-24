@@ -68,3 +68,18 @@ export const listRelatedProducts = productId => {
         })
         .catch(err => console.log(err));
 };
+
+export const getBrainTreeToken = (userId, token) => {
+    return fetch(`${API}/braintree/token/${userId}`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+    })
+        .then(response => {
+            return response.json()
+        })
+        .catch(err => console.log(err));
+};
