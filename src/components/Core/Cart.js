@@ -48,7 +48,7 @@ const Cart = () => {
                 <div className="col-6">
                     <h2>Checkout </h2>
                     <hr/>
-                    <CheckOut products={items}/>
+                    <CheckOut products={items} setRun={setRun} run={run} />
                 </div>
             </div>
         </Layout>
