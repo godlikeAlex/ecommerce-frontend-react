@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {isAuth} from "../Auth";
 import {Link} from "react-router-dom";
-import {getBrainTreeToken, processPayment} from './ApiCore';
+import {getBrainTreeToken, processPayment, createOrder} from './ApiCore';
 import DropIn from 'braintree-web-drop-in-react';
 import {emptyCart} from "./cartHelpers";
 
@@ -34,6 +34,12 @@ const CheckOut = ({products, setRun = f => f, run = undefined}) => {
         }, 0);
     };
 
+    const handleAddress = e => {
+        setData({...data, address: e.target.value});
+    };
+
+    const deliveryAddress = data.address;
+
     const buy = () => {
         let nonce;
         let getInstance = data.instance.requestPaymentMethod()
@@ -48,11 +54,21 @@ const CheckOut = ({products, setRun = f => f, run = undefined}) => {
 
                 processPayment(userId, token, paymentData)
                     .then(response => {
-                        setData({...data, success: response.success});
-                        emptyCart(() => {
-                            setRun(!run);
-                            console.log('Payment Success');
-                        })
+                        const createOrderData = {
+                            products,
+                            transactionId: response.transaction.id,
+                            amount: response.transaction.amount,
+                            address: deliveryAddress
+                        };
+                        createOrder(userId, token, createOrderData)
+                            .then(() => {
+                                setData({...data, success: response.success});
+                                emptyCart(() => {
+                                    setRun(!run);
+                                    console.log('Payment Success');
+                                })
+                            })
+                            .catch(err => setData({...data, error: err}));
                     })
                     .catch(err => console.error(err))
             })
@@ -66,6 +82,17 @@ const CheckOut = ({products, setRun = f => f, run = undefined}) => {
         <div onBlur={() => setData({...data, error: null})}>
             {data.clientToken !== null && products.length > 0 ? (
                 <div>
+                    <div className="form-group mb-3">
+                        <label className="text-muted">Delivery address:</label>
+                        <textarea
+                            cols="30"
+                            rows="10"
+                            className="form-control"
+                            onChange={handleAddress}
+                            value={data.address}
+                            placeholder='Type your delivery address here...'
+                        />
+                    </div>
                     <DropIn options={{
                         authorization: data.clientToken,
                         paypal: {
