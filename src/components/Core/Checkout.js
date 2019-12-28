@@ -44,9 +44,7 @@ const CheckOut = ({products, setRun = f => f, run = undefined}) => {
         let nonce;
         let getInstance = data.instance.requestPaymentMethod()
             .then(data => {
-                console.log(data);
                 nonce = data.nonce;
-                // console.log('send nonce and total to process:', nonce, getTotal(products));
                 const paymentData = {
                     paymentMethodNonce: nonce,
                     amount: getTotal(products)
@@ -56,7 +54,7 @@ const CheckOut = ({products, setRun = f => f, run = undefined}) => {
                     .then(response => {
                         const createOrderData = {
                             products,
-                            transactionId: response.transaction.id,
+                            transaction_id: response.transaction.id,
                             amount: response.transaction.amount,
                             address: deliveryAddress
                         };

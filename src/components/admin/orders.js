@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import Layout from "../Core/Layout";
 import { isAuth } from '../Auth'
 import { listOrders }  from './ApiAdmin';
+import moment from "moment";
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
@@ -23,16 +24,60 @@ const Orders = () => {
         loadOrders();
     }, []);
 
-    const noOrders = orders => {
-        return orders.length < 1 ? <h4>No orders</h4> : null;
+    const showOrdersLength = () => {
+        if(orders.length > 0) {
+            return (
+                <h3 className='text-danger display-2'>Total orders: {orders.length}</h3>
+            )
+        } else {
+            return  (
+                <h3 className="text-danger">No orders.</h3>
+            )
+        }
     };
+
+    const renderOrders = () => (
+        orders.map((order, i) => (
+            <div className="mt-5" key={i} style={{borderBottom: '5px solid indigo'}}>
+                <h2 className='mb-5'>
+                    <span className="bg-primary">Order ID: {order._id}</span>
+                </h2>
+
+                <ul className='list-group mb-2'>
+                    <li className="list-group-item">
+                        {order.status}
+                    </li>
+                    <li className="list-group-item">
+                        Transaction ID: {order.transaction_id}
+                    </li>
+                    <li className="list-group-item">
+                        Amount: {order.amount} $
+                    </li>
+                    <li className="list-group-item">
+                        Ordered by: {order.user.name}
+                    </li>
+                    <li className="list-group-item">
+                        Ordered on: {moment(order.createdAt).fromNow()}
+                    </li>
+                    <li className="list-group-item">
+                        Address: {order.address}
+                    </li>
+                </ul>
+
+                <h4 className='mt-5 mb-4 font-italic'>
+                    Total Products in the order: {order.products.length}
+                </h4>
+            </div>
+        ))
+    );
 
     return (
         <Layout title="Orders" description={`Hello, you can manage all the orders here`} className="container" >
             <div className="row">
                 <div className="col-md-12">
-                    {noOrders(orders)}
-                    {JSON.stringify(orders)}
+                    {showOrdersLength()}
+
+                    {renderOrders()}
                 </div>
             </div>
         </Layout>
