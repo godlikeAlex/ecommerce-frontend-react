@@ -17,6 +17,9 @@ const AdminDashBoard = () => {
                     <li className="list-group-item">
                         <Link className="nav-link" to="/create/product" >Create Product</Link>
                     </li>
+                    <li className="list-group-item">
+                        <Link className="nav-link" to={`/profile/${_id}`} >Profile update</Link>
+                    </li>
                 </ul>
             </div>
         )
