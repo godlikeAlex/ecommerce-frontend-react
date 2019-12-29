@@ -36,7 +36,7 @@ export const updateUser = (user, cb) => {
         if(localStorage.getItem('jwt')) {
             let auth = JSON.parse(localStorage.getItem('jwt'));
             auth.user = user;
-            localStorage.setItem('jwt', JSON.stringify('auth'));
+            localStorage.setItem('jwt', JSON.stringify(auth));
             cb();
         }
     }
