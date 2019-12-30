@@ -13,6 +13,7 @@ import Product from "./components/Core/Product";
 import Cart from "./components/Core/Cart";
 import Orders from "./components/admin/orders";
 import Profile from "./components/user/profile";
+import ManageProducts from "./components/admin/manageProducts";
 
 const Routes = () => (
     <Router>
@@ -30,6 +31,7 @@ const Routes = () => (
             <AdminRoute path="/create/category" exact component={AddCategory}/>
             <AdminRoute path="/create/product" exact component={CreateProduct}/>
             <AdminRoute path="/admin/orders" exact component={Orders}/>
+            <AdminRoute path="/admin/products" exact component={ManageProducts}/>
         </Switch>
     </Router>
 );
