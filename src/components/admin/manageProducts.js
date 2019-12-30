@@ -44,7 +44,7 @@ const ManageProducts = () => {
                             {products.map((product, i) => (
                                 <li key={i} className="list-group-item d-flex justify-content-between align-items-center">
                                     <strong>{product.name}</strong>
-                                    <Link to={`admin/product/update/${product._id}`}>
+                                    <Link to={`/admin/product/update/${product._id}`}>
                                         <span className="badge badge-warning badge-pill">Update product</span>
                                     </Link>
                                     <span className="badge badge-danger badge-pill" onClick={() => removeProduct(product._id)}>Delete product</span>
